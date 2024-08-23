@@ -8,7 +8,10 @@ class PruductoService{
 
   }
   async find(){
-    const query = 'SELECT * FROM productos';
+    const campos = 'SELECT p.nombre,p.marca,p.codigo,p.stock, p.precio, foto, c.nombre AS categoria, u.nombre_completo AS usuario, e.nombre AS estado';
+    const tabla = 'FROM productos p';
+    const join = 'INNER JOIN categoriaProductos c ON c.idCategoriaProducto = p.categoriaProducto_idCategoriaProducto INNER JOIN usuarios u ON u.idUsuario = p.usuario_idUsuario INNER JOIN estados e ON e.idEstado = p.estado_idEstado';
+    const query = campos+tabla+join;
     const [data, metadata] = await sequelize.query(query);
     return {
       data,
@@ -16,8 +19,7 @@ class PruductoService{
     }
   }
   async create(body){
-    const query = 'EXEC sp_insertarProducto :categoriaProducto_idCategoriaProducto, '+
-                  + ':usuario_idUsuario, :nombre, :marca, :codigo, :stock, :estado_idEstado, :precio, :foto';
+    const query = 'EXEC sp_insertarProducto :categoriaProducto_idCategoriaProducto, :usuario_idUsuario, :nombre, :marca, :codigo, :stock, :estado_idEstado, :precio, :foto';
     try{
       await sequelize.query(query, {
         replacements: {
