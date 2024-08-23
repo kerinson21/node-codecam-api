@@ -49,7 +49,9 @@ class CategoriaService {
         },
         type: Sequelize.QueryTypes.UPDATE
       });
-      return 'El registro fue acctualizado';
+      return ['El registro fue acctualizado',
+        body
+      ];
     }else{
       throw boom.notFound('El identificador de la categoria es incorrecto')
     }
