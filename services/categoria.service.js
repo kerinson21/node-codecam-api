@@ -7,8 +7,8 @@ class CategoriaService {
 
   }
   async find(){
-    const query = 'SELECT * FROM categoriaProductos';
-    const [data, metadata] = await sequelize.query(query);
+    const query = 'SELECT c.idCategoriaProducto, u.nombre_completo AS usuario, c.nombre, e.nombre AS estado, c.fecha_creacion FROM categoriaProductos c INNER JOIN usuarios u ON u.idUsuario = c.usuario_idUsuario INNER JOIN estados e ON e.idEstado = c.estado_idEstados';
+      const [data, metadata] = await sequelize.query(query);
     return {
       data,
       metadata
