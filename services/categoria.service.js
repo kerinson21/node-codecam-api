@@ -1,4 +1,5 @@
 const sequelize = require('./../db/mssql');
+const boom = require('@hapi/boom')
 const {Sequelize} = require('sequelize');
 
 class CategoriaService {
@@ -50,7 +51,7 @@ class CategoriaService {
       });
       return 'El registro fue acctualizado';
     }else{
-      return `El idCategoriaProdcuto:${body.idCategoriaProducto} no existe en la base datos`;
+      throw boom.notFound('El identificador de la categoria es incorrecto')
     }
   }
 }
