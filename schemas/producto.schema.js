@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { updateCategoriaSchema } = require('./categoria.schema');
 
 const idProducto = Joi.number().integer();
 const categoriaProducto_idCategoriaProducto = Joi.number().integer();
@@ -31,4 +32,6 @@ const uptadteProductoSchema = Joi.object({
   stock: stock.required(),
   precio: precio.required(),
   foto: foto.required()
-})
+});
+
+module.exports = {createProductoSchema, updateCategoriaSchema};
