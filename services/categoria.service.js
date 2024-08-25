@@ -1,4 +1,4 @@
-const sequelize = require('./../db/mssql');
+const sequelize = require('./../db/connection');
 const boom = require('@hapi/boom')
 const {Sequelize} = require('sequelize');
 
@@ -8,7 +8,7 @@ class CategoriaService {
   }
   async find(){
     const query = 'SELECT c.idCategoriaProducto, u.nombre_completo AS usuario, c.nombre, e.nombre AS estado, c.fecha_creacion FROM categoriaProductos c INNER JOIN usuarios u ON u.idUsuario = c.usuario_idUsuario INNER JOIN estados e ON e.idEstado = c.estado_idEstados';
-      const [data, metadata] = await sequelize.query(query);
+    const [data, metadata] = await sequelize.query(query);
     return {
       data,
       metadata
@@ -37,7 +37,7 @@ class CategoriaService {
       },
       type: Sequelize.QueryTypes.SELECT
     });
-    if(queryId.length === 0){
+    if(exist.length === 0){
       const query = 'EXEC sp_actualizarCategoriaProducto :idCategoriaProducto, :usuario_idUsuario, :nombre, :estado_idEstados, :fecha_creacion';
       await sequelize.query(query, {
         replacements: {

@@ -1,4 +1,4 @@
-const sequelize = require('./../db/mssql');
+const sequelize = require('./../db/connection');
 const { Sequelize } = require('sequelize');
 
 class EstadoService {

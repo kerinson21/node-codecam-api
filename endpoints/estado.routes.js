@@ -2,7 +2,7 @@ const express = require('express');
 
 const EstadoService = require('../services/estado.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const {createEstadoSquema, updateEstadoSchema} = require('../schemas/estados.schema');
+const {createEstadoSquema, updateEstadoSchema} = require('../schemas/estado.schema');
 
 const router = express.Router();
 const service = new EstadoService();
@@ -22,7 +22,7 @@ router.post('/',
 
 router.put('/',
   validatorHandler(updateEstadoSchema,'body'),
-  async (req,res) =>{
+  async (req,res, next) =>{
     try {
       const body = req.body;
       const updateEstado = await service.update(body);

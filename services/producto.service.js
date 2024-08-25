@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const sequelize = require('../db/mssql');
+const sequelize = require('../db/connection');
 const boom = require('@hapi/boom');
 
 
@@ -8,7 +8,7 @@ class PruductoService{
 
   }
   async find(){
-    const query = 'SELECT p.nombre,p.marca,p.codigo,p.stock, p.precio, foto, c.nombre AS categoria, u.nombre_completo AS usuario, e.nombre AS estado FROM productos p INNER JOIN categoriaProductos c ON c.idCategoriaProducto = p.categoriaProducto_idCategoriaProducto INNER JOIN usuarios u ON u.idUsuario = p.usuario_idUsuario INNER JOIN estados e ON e.idEstado = p.estado_idEstado';
+    const query = 'SELECT p.nombre,p.marca,p.codigo,p.stock, p.precio, p.foto, c.nombre AS categoria, u.nombre_completo AS usuario, e.nombre AS estado FROM productos p INNER JOIN categoriaProductos c ON c.idCategoriaProducto = p.categoriaProducto_idCategoriaProducto INNER JOIN usuarios u ON u.idUsuario = p.usuario_idUsuario INNER JOIN estados e ON e.idEstado = p.estado_idEstado';
     const [data, metadata] = await sequelize.query(query);
     return {
       data,
