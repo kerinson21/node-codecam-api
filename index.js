@@ -3,11 +3,12 @@ const cors = require('cors');
 const routerApi = require('./endpoints');
 const passport = require('passport');
 
+const {config} = require('./config/config');
 
 const {logErrors, errorHandler,boomErrorHandler} = require('./middlewares/error.handler');
 
 const app = express();
-const port = 3000;
+const port = config.port;
 
 app.use(express.json());
 
