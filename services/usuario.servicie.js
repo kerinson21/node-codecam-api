@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const sequelize = require('./../db/connection');
 const boom = require('@hapi/boom');
+const bcript = require('bcrypt');
 
 class UsuarioService {
   constructor(){
@@ -15,6 +16,7 @@ class UsuarioService {
     }
   }
   async create(body){
+    const hash = await bcript.hash(body.password,10)
     const query = 'EXEC sp_insertarUsuario :rol_idRol, :estado_idEstado, :correo_electronico, :nombre_completo, :password, :telefono, :fecha_nacimiento';
     try{
       await sequelize.query(query, {
@@ -23,7 +25,7 @@ class UsuarioService {
           estado_idEstado: body.estado_idEstado,
           correo_electronico: body.correo_electronico,
           nombre_completo: body.nombre_completo,
-          password: body.password,
+          password: hash,
           telefono: body.telefono,
           fecha_nacimiento: body.fecha_nacimiento
         },
@@ -54,6 +56,15 @@ class UsuarioService {
     } catch (error) {
       throw boom.notImplemented('No se pudo actualizar el registro');
     }
+  }
+  async findByEmail(correo_electronico){
+    const query = 'SELECT * FROM usuarios WHERE correo_electronico = :correo_electronico';
+      const [data] = await sequelize.query(query, {
+        replacements: {
+          correo_electronico: correo_electronico
+        }
+      });
+      return data[0];
   }
 }
 

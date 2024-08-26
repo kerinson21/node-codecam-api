@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./endpoints');
+const passport = require('passport');
+
 
 const {logErrors, errorHandler,boomErrorHandler} = require('./middlewares/error.handler');
 
@@ -24,6 +26,7 @@ const options = {
   }
 };
 app.use(cors(options));
+app.use(passport.initialize());
 
 routerApi(app);
 

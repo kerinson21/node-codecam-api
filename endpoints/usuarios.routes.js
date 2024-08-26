@@ -11,7 +11,6 @@ router.get('/', async(req,res)=>{
   const usuarios = await service.find();
   res.json(usuarios);
 });
-
 router.post('/',
   validatorHandler(createUsuarioSchema, 'body'),
   async(req, res)=>{
