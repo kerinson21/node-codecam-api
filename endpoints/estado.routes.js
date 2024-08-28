@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('../utils');
 
 const EstadoService = require('../services/estado.service');
 const validatorHandler = require('../middlewares/validator.handler');
@@ -13,6 +14,7 @@ router.get('/', async (req,res) => {
 });
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createEstadoSquema, 'body'),
   async (req,res) => {
     const {nombre} = req.body;
@@ -21,6 +23,7 @@ router.post('/',
 });
 
 router.put('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(updateEstadoSchema,'body'),
   async (req,res, next) =>{
     try {

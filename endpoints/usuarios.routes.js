@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('../utils');
+
 
 const UsuarioService = require('../services/usuario.servicie');
 const validatorHandler = require('../middlewares/validator.handler');
@@ -12,14 +14,15 @@ router.get('/', async(req,res)=>{
   res.json(usuarios);
 });
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createUsuarioSchema, 'body'),
   async(req, res)=>{
     const newUsuario = await service.create(req.body);
     res.status(201).json(newUsuario);
   }
-)
-
+);
 router.put('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(updateUsuarioSchema, 'body'),
   async(req, res, next) => {
     try{

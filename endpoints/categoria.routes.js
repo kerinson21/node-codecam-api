@@ -21,6 +21,7 @@ router.post('/',
 });
 
 router.put('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(updateCategoriaSchema, 'body'),
   async(req,res, next)=>{
     try {

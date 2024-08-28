@@ -16,6 +16,7 @@ class CategoriaService {
   }
   async create(body){
     const query = 'EXEC sp_insertarCategoriaProducto :usuario_idUsuario, :nombre, :estado_idEstados';
+    try{
     await sequelize.query(query, {
         replacements: {
           usuario_idUsuario: body.usuario_idUsuario,
@@ -28,6 +29,9 @@ class CategoriaService {
       'El registro fue agregado',
       body
     ]
+  }catch(error){
+    throw boom.notAcceptable('Los datos no fueron guardados');
+  }
   }
   async update(body){
     const queryId = 'SELECT idCategoriaProducto FROM categoriaProductos WHERE idCategoriaProducto= :idCategoriaProducto';
