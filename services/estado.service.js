@@ -1,5 +1,6 @@
 const sequelize = require('./../db/connection');
 const { Sequelize } = require('sequelize');
+const boom = require('@hapi/boom');
 
 class EstadoService {
   constructor(){
@@ -13,12 +14,17 @@ class EstadoService {
     }
   }
   async create(nombre){
-    const query = 'EXEC sp_insertarEstado :nombre';
-    const result = await sequelize.query(query, {
+    try {
+      const query = 'EXEC sp_insertarEstado :nombre; SELECT TOP 1 * from estados ORDER BY idEstado DESC;';
+      const [result] = await sequelize.query(query, {
       replacements: {nombre: nombre},
       type: Sequelize.QueryTypes.INSERT
     });
-    return result;
+    return ["Se guardo correctamente el registro", result[0]];
+    } catch (error) {
+      throw boom.notAcceptable();
+    }
+
   }
   async update(body){
     const query = "EXEC sp_actualizarEstado :idEstado, :nombre"
