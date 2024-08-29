@@ -1,8 +1,8 @@
 const express = require('express');
 const passport = require('../utils');
+const boom = require('@hapi/boom');
 
 const OrdenService = require('../services/orden.service');
-const validatorHandler = require('../middlewares/validator.handler');
 
 const router = express.Router();
 const service = new OrdenService();
@@ -12,14 +12,14 @@ router.get('/', async (req,res) => {
   res.json(orden);
 });
 
-router.post('/', async (req, res)=>{
+router.post('/',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res)=>{
   try {
-    const {orden} =  req.body;
-    // const [detalles] = req.detalles;
-    const result = await service.createOrden(orden);
+    const result = await service.createOrden(req.body);
     res.json(result);
   } catch (error) {
-    throw error;
+    throw boom.notAcceptable('No se puedo insertar los registros');
   }
 });
 

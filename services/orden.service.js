@@ -15,9 +15,12 @@ class OrdenService {
       metadata
     }
   }
-  async createOrden(orden){
+  async createOrden(body){
     const queryOrden = 'EXEC sp_insertarOrden :idUsuario, :idEstado, :nombre_completo, :direccion, :telefono,:correo,:fecha_entrega,:total_orden; SELECT TOP 1 idOrden FROM ordenes ORDER BY idOrden DESC;'
+    const queryDetalles = 'EXEC sp_insertarOrdenDetalle :idOrden,:idProducto,:cantidad,:precio,:subTotal';
+
     try {
+      const orden = body.orden;
       const [result] = await sequelize.query(queryOrden,{
         replacements: {
           idUsuario: orden.idUsuario,
@@ -31,11 +34,25 @@ class OrdenService {
         },
         type: Sequelize.QueryTypes.INSERT
       });
-
-      return result[0];
+      const detalles = body.detalles
+      const idOrden = result[0].idOrden;
+      for (const index in detalles) {
+        await sequelize.query(queryDetalles, {
+          replacements: {
+            idOrden: idOrden,
+            idProducto: detalles[index].idProducto,
+            cantidad: detalles[index].cantidad,
+            precio: detalles[index].precio,
+            subTotal: detalles[index].subTotal
+          },
+          type: Sequelize.QueryTypes.INSERT
+        })
+      }
+      return 'Se agrego correctamente la orden'
     } catch (error) {
-      boom.notAcceptable('No se pudo insertar');
+      throw boom.notAcceptable('No se pudo insertar');
     }
+
   }
 }
 
