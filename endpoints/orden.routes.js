@@ -19,7 +19,7 @@ router.post('/',
     const result = await service.createOrden(req.body);
     res.json(result);
   } catch (error) {
-    throw boom.notAcceptable('No se puedo insertar los registros');
+    return res.status(500).json({message: error.message});
   }
 });
 

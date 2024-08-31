@@ -1,4 +1,4 @@
-const { Sequelize, or } = require('sequelize');
+const { Sequelize} = require('sequelize');
 const sequelize = require('../db/connection');
 const boom = require('@hapi/boom');
 
@@ -16,9 +16,8 @@ class OrdenService {
     }
   }
   async createOrden(body){
-    const queryOrden = 'EXEC sp_insertarOrden :idUsuario, :idEstado, :nombre_completo, :direccion, :telefono,:correo,:fecha_entrega,:total_orden; SELECT TOP 1 idOrden FROM ordenes ORDER BY idOrden DESC;'
+    const queryOrden = 'EXEC sp_insertarOrden :idUsuario, :idEstado, :nombre_completo, :direccion, :telefono,:correo,:fecha_entrega,:total_orden'
     const queryDetalles = 'EXEC sp_insertarOrdenDetalle :idOrden,:idProducto,:cantidad,:precio,:subTotal';
-
     try {
       const orden = body.orden;
       const [result] = await sequelize.query(queryOrden,{

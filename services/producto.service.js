@@ -8,7 +8,7 @@ class PruductoService{
 
   }
   async find(){
-    const query = `SELECT p.nombre,p.marca,p.codigo,p.stock, p.precio, CAST('' AS XML).value('xs:base64Binary(sql:column("p.foto"))', 'varchar(max)') AS foto, c.nombre AS categoria, u.nombre_completo AS usuario, e.nombre AS estado FROM productos p INNER JOIN categoriaProductos c ON c.idCategoriaProducto = p.categoriaProducto_idCategoriaProducto INNER JOIN usuarios u ON u.idUsuario = p.usuario_idUsuario INNER JOIN estados e ON e.idEstado = p.estado_idEstado`;
+    const query = 'SELECT * FROM vw_productos';
     const [data, metadata] = await sequelize.query(query);
     return {
       data,

@@ -15,9 +15,14 @@ router.get('/', async(req,res)=>{
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createCategoriaSchema, 'body'),
-  async (req, res)=>{
-    const newCategoria = await service.create(req.body);
-    res.status(201).json(newCategoria);
+  async (req, res, next)=>{
+    try {
+      const newCategoria = await service.create(req.body);
+      res.status(201).json(newCategoria);
+    } catch (error) {
+      next(error);
+    }
+
 });
 
 router.put('/',
