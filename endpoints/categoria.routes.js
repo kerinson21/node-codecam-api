@@ -15,12 +15,12 @@ router.get('/', async(req,res)=>{
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createCategoriaSchema, 'body'),
-  async (req, res, next)=>{
+  async (req, res)=>{
     try {
       const newCategoria = await service.create(req.body);
       res.status(201).json(newCategoria);
     } catch (error) {
-      next(error);
+      return res.status(406).json({message: error});
     }
 
 });
@@ -28,12 +28,12 @@ router.post('/',
 router.put('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(updateCategoriaSchema, 'body'),
-  async(req,res, next)=>{
+  async(req,res)=>{
     try {
       const updateCategoria = await service.update(req.body);
       res.json(updateCategoria);
     } catch (error) {
-      next(error)
+      return res.status(406).json({message: error});
     }
   });
 

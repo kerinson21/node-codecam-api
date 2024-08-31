@@ -16,12 +16,12 @@ router.get('/', async(req,res)=>{
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createUsuarioSchema, 'body'),
-  async(req, res, next)=>{
+  async(req, res)=>{
     try {
       const newUsuario = await service.create(req.body);
       res.status(201).json(newUsuario);
     } catch (error) {
-      next(error);
+      return res.status(406).json({message: error});
     }
 
   }
@@ -29,12 +29,12 @@ router.post('/',
 router.put('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(updateUsuarioSchema, 'body'),
-  async(req, res, next) => {
+  async(req, res) => {
     try{
       const updateUsuario = await service.update(req.body);
       res.json(updateUsuario);
     }catch(error){
-      next(error);
+      return res.status(406).json({message: error});
     }
   }
 )

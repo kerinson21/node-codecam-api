@@ -30,13 +30,13 @@ router.post('/',
 router.put('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(updateEstadoSchema,'body'),
-  async (req,res, next) =>{
+  async (req,res) =>{
     try {
       const body = req.body;
       const updateEstado = await service.update(body);
       res.json(updateEstado);
     } catch (error) {
-      next(error);
+      return res.status(406).json({message: error});
     }
 });
 

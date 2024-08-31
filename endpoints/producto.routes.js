@@ -15,25 +15,25 @@ router.get('/', async(req,res)=>{
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createProductoSchema, 'body'),
-  async (req,res, next) => {
+  async (req,res) => {
     try {
       const {body} = req;
       const nuevoProducto = await service.create(body);
       res.status(201).json(nuevoProducto);
     } catch (error) {
-      next(error);
+      return res.status(406).json({message: error});
     }
 
 });
 router.put('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(updateProductoSchema, 'body'),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const producto = await service.create(req.body);
       res.status(201).json(producto);
     } catch (error) {
-      next(error);
+      return res.status(406).json({message: error});
     }
 
   }
