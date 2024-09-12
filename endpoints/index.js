@@ -12,7 +12,7 @@ function routerApi(app){
   const router = express.Router();
   app.use('/api/v1', router);
   router.use('/estados', estadosRouter);
-  router.use('/categoria', categoriaRouter);
+  router.use('/categorias', categoriaRouter);
   router.use('/productos', productoRouter);
   router.use('/usuarios', usuarioRouter);
   router.use('/ordenes', ordenRouter);

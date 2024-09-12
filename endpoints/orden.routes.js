@@ -12,6 +12,18 @@ router.get('/', async (req,res) => {
   res.json(orden);
 });
 
+router.get('/myordenes/:id',
+  passport.authenticate('jwt', {session: false}),
+  async (req,res) => {
+    try {
+      const {id} = req.params
+      const orden = await service.findOrden(id);
+      res.json(orden);
+    } catch (error) {
+      res.json(error);
+    }
+});
+
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   async (req, res)=>{

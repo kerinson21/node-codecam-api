@@ -15,6 +15,22 @@ class OrdenService {
       metadata
     }
   }
+  async findOrden(id){
+
+      const query = 'SELECT o.direccion, o.telefono, e.nombre as estado, o.idOrden, o.total_orden FROM  ordenes o INNER JOIN estados e ON e.idEstado = o.estado_idEstado where usuario_idUsuario= :usuario_idUsuario';
+
+      try {
+        const data =  await sequelize.query(query, {
+          replacements: {
+            usuario_idUsuario: id
+          },
+          type: Sequelize.QueryTypes.SELECT
+        })
+        return data;
+      } catch (error) {
+      throw boom.notFound('No se encontro el usuario');
+    }
+  }
   async createOrden(body){
     const queryOrden = 'EXEC sp_insertarOrden :idUsuario, :idEstado, :nombre_completo, :direccion, :telefono,:correo,:fecha_entrega,:total_orden'
     const queryDetalles = 'EXEC sp_insertarOrdenDetalle :idOrden,:idProducto,:cantidad,:precio,:subTotal';

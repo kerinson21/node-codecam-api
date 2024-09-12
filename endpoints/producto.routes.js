@@ -8,7 +8,9 @@ const {createProductoSchema, updateProductoSchema} = require('../schemas/product
 const router = express.Router();
 const service = new ProductoService();
 
-router.get('/', async(req,res)=>{
+router.get('/',
+  passport.authenticate('jwt', {session: false}),
+  async(req,res)=>{
   const productos = await service.find();
   res.json(productos);
 });
